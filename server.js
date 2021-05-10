@@ -1,13 +1,17 @@
-var express = require('express')
-var app = express()
-var PORT = process.env.PORT || 3000;
-var path = require('path')
-var bodyParser = require('body-parser');
+const express = require('express')
+const app = express()
+const PORT = process.env.PORT || 3000
+const path = require('path')
+const bodyParser = require('body-parser')
+const qs = require('querystring')
+
+app.use(bodyParser.json())
 
 // database
 const mongoose = require("mongoose")
 mongoose.connect('mongodb+srv://default:energy2000wisla1@modern-irc.cggrm.mongodb.net/modern-irc?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
-const User = require('./models/user.js')
+const User = require('./models/user.js');
+const { request } = require('https');
 
 //functions
 
@@ -39,8 +43,6 @@ const functions = {
     },
 }
 
-app.use(bodyParser.json());
-
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname + "/static/index.html"))
 })
@@ -55,13 +57,31 @@ app.get("/clear", function (req, res) {
 
 app.post('/alp', (req, res) => {
 
+    let body = req.body
+
     let stopLoop = false
     const timeout = setTimeout(() => { stopLoop = true }, 10000);
     function pendingLoop() {
         const loop = setTimeout(function () {
-            if (stopLoop == true) res.status(200).json(null)
-            else pendingLoop()
-        }, 10)
+            if (stopLoop == true) {
+                User.findOne({ _id: body.userId })
+                    .exec()
+                    .then(doc => {
+                        res.status(200).json(doc)
+                    })
+            } else {
+                User.findOne({ _id: body.userId })
+                    .exec()
+                    .then(doc => {
+
+                        if (doc.chat.toString() != body.chat.toString()) {
+                            res.status(200).json(doc)
+                        } else {
+                            pendingLoop()
+                        }
+                    })
+            }
+        }, 100)
     }
     pendingLoop()
 })

@@ -1,12 +1,11 @@
 let nick
 let color
 let userId
-let chat
+let chat = []
 
 const root = {
 
     init: function () {
-        this.alp()
         this.postUserInformations()
         this.sendMessege()
     },
@@ -17,13 +16,20 @@ const root = {
             $.ajax({
                 method: "POST",
                 url: "/alp",
-                dataType: "json"
-            })
-                .always(function () {
-                    pending()
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    nick: nick,
+                    color: color,
+                    userId: userId,
+                    chat: chat
                 })
-                .done(function (msg) {
-                    console.log("success", msg)
+            })
+                .done(function (data) {
+                    // console.log("success", data)
+                    chat = data.chat
+                    root.generateChat(chat)
+                    pending()
                 })
         }
         pending()
@@ -56,6 +62,7 @@ const root = {
                     .then(res => res.json())
                     .then(data => {
                         userId = data._id
+                        this.alp()
                     })
                     .catch(error => console.log(error))
 
@@ -89,9 +96,7 @@ const root = {
                     body: JSON.stringify(message)
                 })
                     .then(res => res.json())
-                    .then(data => {
-                        this.addMessageToChat(data)
-                    })
+                    .then(() => { })
                     .catch(error => console.log(error))
             }
         }
@@ -99,50 +104,55 @@ const root = {
 
     },
 
-    addMessageToChat: function (messageObject) {
-
-        let className
-        switch (messageObject.color) {
-            case 'Red':
-                className = "is-danger"
-                break
-            case 'Green':
-                className = "is-success"
-                break
-            case 'Blue':
-                className = "is-link"
-                break
-            case 'Dark':
-                className = "is-dark"
-                break
-            case 'Cyan':
-                className = "is-info"
-                break
-            case 'Turquoise':
-                className = "is-primary"
-                break
-            case 'Yellow':
-                className = "is-warning"
-                break
-        }
+    generateChat: function (messages) {
 
         const chat = document.querySelector('#chat-root')
-        const article = document.createElement('article')
-        const header = document.createElement('div')
-        const p = document.createElement('p')
-        const text = document.createElement('div')
+        chat.innerHTML = ""
 
-        article.classList.add('message', 'is-small', className)
-        header.classList.add('message-header', 'py-1')
-        text.classList.add('message-body')
+        for (let message of messages) {
 
-        p.innerHTML = `@${messageObject.nick} - ${messageObject.time}`
-        text.innerHTML = messageObject.text
+            let className
+            switch (message.color) {
+                case 'Red':
+                    className = "is-danger"
+                    break
+                case 'Green':
+                    className = "is-success"
+                    break
+                case 'Blue':
+                    className = "is-link"
+                    break
+                case 'Dark':
+                    className = "is-dark"
+                    break
+                case 'Cyan':
+                    className = "is-info"
+                    break
+                case 'Turquoise':
+                    className = "is-primary"
+                    break
+                case 'Yellow':
+                    className = "is-warning"
+                    break
+            }
 
-        chat.appendChild(article)
-        article.appendChild(header)
-        header.appendChild(p)
-        article.appendChild(text)
+            const article = document.createElement('article')
+            const header = document.createElement('div')
+            const p = document.createElement('p')
+            const text = document.createElement('div')
+
+            article.classList.add('message', 'is-small', className)
+            header.classList.add('message-header', 'py-1')
+            text.classList.add('message-body')
+
+            p.innerHTML = `@${message.nick} - ${message.time}`
+            text.innerHTML = message.text
+
+            chat.appendChild(article)
+            article.appendChild(header)
+            header.appendChild(p)
+            article.appendChild(text)
+        }
     }
 }
 

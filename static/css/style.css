@@ -36,7 +36,7 @@ section#chat {
 }
 
 
-div#chat-column {
+div#chat-root {
     overflow-y: scroll;
-    max-height: calc(100vh - 80px - 84px);
+    max-height: calc(100vh - 200px);
 }
