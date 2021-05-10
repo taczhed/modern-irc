@@ -1,0 +1,50 @@
+    // let send = false
+    // let counter = 0
+
+    // const interval = setInterval(() => {
+
+    //     //zmiana w bazie daje send = true
+
+
+    //     if (send == true || counter == 100) {
+    //         res.status(200).json(null)
+    //     }
+
+    //     counter++
+    // }, 100)
+
+    // next
+
+    // let i = 1
+
+    // function myLoop() {
+    //     const loop = setTimeout(function () {
+    //         if (i < 100) {
+    //             // console.log(i)
+    //             myLoop()
+    //         } else {
+    //             res.status(200).json(null)
+    //         }
+    //         i++
+    //     }, 100)
+    // }
+    // myLoop()
+
+    // next
+
+    // let send = false
+
+    // const timeout = setTimeout(() => {
+    //     send = true
+    // }, 10000);
+
+    // const interval = setInterval(() => {
+
+    //     console.log(new Date().getTime())
+
+    //     if (send == true) {
+    //         clearInterval(interval)
+    //         res.status(200).json(null)
+    //     }
+
+    // }, 100);

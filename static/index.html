@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="modules/jquery/jquery.js"></script>
+    <script defer src="modules/code.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="modules/bulma/css/bulma-rtl.min.css">
+    <link rel="stylesheet" href="modules/bulma/css/bulma.min.css">
+    <!-- fonts -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <title>Modern IRC</title>
+</head>
+
+<body>
+    <!-- login -->
+    <section class="login section py-3 px-5">
+
+        <div class="columns is-vcentered">
+            <div class="column is-full">
+
+                <h1 class="title is-1 has-text-light has-text-centered">
+                    IRC
+                </h1>
+                <p class="subtitle is-4 has-text-light has-text-centered">
+                    Choose your color and user name
+                </p>
+
+                <div class="field has-addons has-addons-centered">
+                    <p class="control">
+                        <span id="color-select" class="select is-primary">
+                            <select id="select-value">
+                                <option selected>Color</option>
+                                <option>Red</option>
+                                <option>Green</option>
+                                <option>Blue</option>
+                                <option>Dark</option>
+                                <option>Cyan</option>
+                                <option>Turquoise</option>
+                                <option>Yellow</option>
+                            </select>
+                        </span>
+                    </p>
+                    <p class="control">
+                        <input id="user-name" class="input is-primary" type="text" placeholder="User Name">
+                    </p>
+                    <p class="control">
+                        <button id="start-button" class="button is-primary">
+                            Start
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- hero -->
+    <section id="header" class="hero is-dark is-small">
+        <div class="hero-body">
+            <h1 class="title has-text-centered">
+                Let's chat!
+            </h1>
+            <p class="subtitle has-text-centered">
+                Modern IRC
+            </p>
+        </div>
+    </section>
+
+
+    <!-- chat -->
+    <section id="chat" class="section py-3 px-5">
+
+        <div class="columns">
+            <div id="chat-root" class="column is-12"></div>
+        </div>
+    </section>
+
+    <!-- bottom-bar -->
+    <section id="bottom-bar">
+
+        <div class="box">
+            <div class="columns is-mobile">
+                <div class="column is-auto px-0">
+                    <input id="my-message" class="input is-dark is-rounded is-small" type="text"
+                        placeholder="Wpisz wiadomość...">
+                </div>
+                <div class="column is-1 has-text-centered px-0">
+                    <button id="message-button" class="button is-dark is-rounded is-small">
+                        <span class="icon">
+                            <i class="fab fa-telegram-plane"></i>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
