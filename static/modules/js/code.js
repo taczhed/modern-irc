@@ -36,27 +36,32 @@ const root = {
 
                 header.classList.add(this.translateColors(color))
 
-                fetch("/sendUserInformations", {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
+                async function sendPost() {
+
+                    const headers = { 'Content-Type': 'application/json' }
+                    const body = JSON.stringify({
                         nick: nick,
                         color: color
                     })
-                })
-                    .then(res => res.json())
-                    .then(data => {
+                    let response = await fetch("/sendUserInformations", { method: "POST", body, headers })
+
+                    if (!response.ok)
+                        return respose.status
+                    else {
+                        let data = await response.json()
                         userId = data._id
-                        this.alp()
-                        this.enterButton()
-                    })
-                    .catch(error => console.log(error))
+                        root.alp()
+                        root.enterButton()
+                    }
+                }
+
+                sendPost()
 
             } else {
                 userInput.classList.add('is-danger')
                 userButton.classList.add('is-danger')
                 colorSelectSpan.classList.add('is-danger')
-                userInput.setAttribute('placeholder', 'Invalid User Name')
+                userInput.setAttribute('placeholder', 'Invalid Nick')
             }
         }
     },
@@ -105,22 +110,23 @@ const root = {
 
             if (myMessage.value != "") {
 
-                let message = {
-                    nick: nick,
-                    color: color,
-                    text: myMessage.value
-                }
-
-                fetch("/sendMessage", {
-                    method: "POST",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(message)
-                })
-                    .then(res => res.json())
-                    .then(() => {
-                        myMessage.value = ""
+                async function sendPost() {
+                    const headers = { 'Content-Type': 'application/json' }
+                    const body = JSON.stringify({
+                        nick: nick,
+                        color: color,
+                        text: myMessage.value
                     })
-                    .catch(error => console.log(error))
+                    let response = await fetch("/sendMessage", { method: "POST", body, headers })
+
+                    if (!response.ok)
+                        return respose.status
+                    else {
+                        await response.json()
+                        myMessage.value = ""
+                    }
+                }
+                sendPost()
             }
         }
     },

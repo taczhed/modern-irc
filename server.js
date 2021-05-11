@@ -10,8 +10,8 @@ app.use(bodyParser.json())
 // database
 const mongoose = require("mongoose")
 mongoose.connect('mongodb+srv://default:energy2000wisla1@modern-irc.cggrm.mongodb.net/modern-irc?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
-const User = require('./models/user.js');
-const { request } = require('https');
+const User = require('./models/user.js')
+const Session = require('./models/session.js')
 
 //functions
 
@@ -45,6 +45,32 @@ const functions = {
 
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname + "/static/index.html"))
+
+    // remove afk users
+
+    let currentTime = functions.currentTime()
+    currentTime = currentTime.split(':')
+    let hours = currentTime[0]
+    let minutes = currentTime[1]
+    let secounds = currentTime[2]
+    currentTime = new Date(hours, minutes, secounds).getTime()
+
+    Session.find({})
+        .exec()
+        .then(docs => {
+            for (let doc of docs) {
+                let date = doc.time.split(':')
+                let hours = date[0]
+                let minutes = date[1]
+                let secounds = date[2]
+                date = new Date(hours, minutes, secounds).getTime()
+                // about 5 minutes afk
+                if (currentTime - date >= 25920000000) {
+                    User.findOneAndDelete({ _id: doc._id }).exec().then(() => { console.log("delete afk user from Users") })
+                    Session.findOneAndDelete({ _id: doc._id }).exec().then(() => { console.log("delete afk user from Session") })
+                }
+            }
+        })
 })
 
 app.get("/clear", function (req, res) {
@@ -59,31 +85,43 @@ app.post('/alp', (req, res) => {
 
     let body = req.body
 
-    let stopLoop = false
-    const timeout = setTimeout(() => { stopLoop = true }, 10000);
-    function pendingLoop() {
-        const loop = setTimeout(function () {
-            if (stopLoop == true) {
-                User.findOne({ _id: body.userId })
-                    .exec()
-                    .then(doc => {
-                        res.status(200).json(doc)
-                    })
-            } else {
-                User.findOne({ _id: body.userId })
-                    .exec()
-                    .then(doc => {
+    //update session time
 
-                        if (doc.chat.toString() != body.chat.toString()) {
-                            res.status(200).json(doc)
-                        } else {
-                            pendingLoop()
-                        }
-                    })
+    Session.updateOne(
+        { _id: body.userId },
+        { $set: { time: functions.currentTime() } }
+    )
+        .exec()
+        .then(() => {
+
+            // start loop
+
+            let stopLoop = false
+            const timeout = setTimeout(() => { stopLoop = true }, 10000);
+            function pendingLoop() {
+                const loop = setTimeout(function () {
+                    if (stopLoop == true) {
+                        User.findOne({ _id: body.userId })
+                            .exec()
+                            .then(doc => {
+                                res.status(200).json(doc)
+                            })
+                    } else {
+                        User.findOne({ _id: body.userId })
+                            .exec()
+                            .then(doc => {
+
+                                if (doc.chat.toString() != body.chat.toString()) {
+                                    res.status(200).json(doc)
+                                } else {
+                                    pendingLoop()
+                                }
+                            })
+                    }
+                }, 100)
             }
-        }, 100)
-    }
-    pendingLoop()
+            pendingLoop()
+        })
 })
 
 app.post('/sendUserInformations', (req, res) => {
@@ -98,6 +136,15 @@ app.post('/sendUserInformations', (req, res) => {
     user.save().then(result => {
         // console.log(result)
         res.status(200).json(userObject)
+
+        const sessionObject = {
+            _id: userObject._id,
+            time: functions.currentTime()
+        }
+
+        const session = new Session(sessionObject)
+        session.save()
+            .catch(err => { console.log(err) })
     })
         .catch(err => { console.log(err) })
 
