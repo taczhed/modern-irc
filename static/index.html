@@ -5,15 +5,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern IRC</title>
+
+    <!-- modules -->
     <script src="modules/jquery/jquery.js"></script>
-    <script defer src="modules/code.js"></script>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="modules/bulma/css/bulma-rtl.min.css">
-    <link rel="stylesheet" href="modules/bulma/css/bulma.min.css">
+    <script src="modules/css-emoticons/jquery.cssemoticons.min.js" type="text/javascript"></script>
+    <script defer type="module" src="modules/js/code.js"></script>
+    <script defer type="module" src="modules/js/emoticons.js"></script>
+    <link rel="stylesheet" href="css/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/scrollbar.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="modules/bulma/css/bulma-rtl.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="modules/bulma/css/bulma.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="modules/css-emoticons/jquery.cssemoticons.css" rel="stylesheet" type="text/css">
+
     <!-- fonts -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <title>Modern IRC</title>
 </head>
 
 <body>
@@ -34,7 +41,7 @@
                     <p class="control">
                         <span id="color-select" class="select is-primary">
                             <select id="select-value">
-                                <option selected>Color</option>
+                                <option selected>Random Color</option>
                                 <option>Red</option>
                                 <option>Green</option>
                                 <option>Blue</option>
@@ -46,7 +53,7 @@
                         </span>
                     </p>
                     <p class="control">
-                        <input id="user-name" class="input is-primary" type="text" placeholder="User Name">
+                        <input id="user-name" class="input is-primary" type="text" placeholder="Nick">
                     </p>
                     <p class="control">
                         <button id="start-button" class="button is-primary">
@@ -60,7 +67,7 @@
     </section>
 
     <!-- hero -->
-    <section id="header" class="hero is-dark is-small">
+    <section id="header" class="hero is-small">
         <div class="hero-body">
             <h1 class="title has-text-centered">
                 Let's chat!

@@ -1,0 +1,15 @@
+/* scrollbar */
+
+div#chat-root::-webkit-scrollbar {
+    width: 6px;               /* width of the entire scrollbar */
+}
+  
+div#chat-root::-webkit-scrollbar-track {
+    background: #bbbbbb;        /* color of the tracking area */
+}
+  
+div#chat-root::-webkit-scrollbar-thumb {
+    background-color: #888888;    /* color of the scroll thumb */
+    border-radius: 24px;       /* roundness of the scroll thumb */
+    /* border: 3px solid orange;  creates padding around scroll thumb */
+}
