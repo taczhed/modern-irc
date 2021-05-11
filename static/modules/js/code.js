@@ -110,49 +110,94 @@ const root = {
 
             if (myMessage.value != "") {
 
-                async function sendPost() {
-                    const headers = { 'Content-Type': 'application/json' }
-                    const body = JSON.stringify({
-                        nick: nick,
-                        color: color,
-                        text: myMessage.value
-                    })
-                    let response = await fetch("/sendMessage", { method: "POST", body, headers })
+                let message = myMessage.value.split(' ')
 
-                    if (!response.ok)
-                        return respose.status
-                    else {
-                        await response.json()
-                        myMessage.value = ""
+                if (message.includes('/nick') || message.includes('/color')) {
+
+                    let newColor = color
+                    let newNick = nick
+
+                    if (message.includes('/nick')) {
+                        let indexOfNick = message.indexOf('/nick')
+                        if (indexOfNick + 1 == message.length) newNick = nick
+                        else newNick = message[indexOfNick + 1]
+                    } else {
+                        let indexOfColor = message.indexOf('/color')
+                        if (indexOfColor + 1 == message.length) newColor = nick
+                        else newColor = message[indexOfColor + 1]
                     }
+
+                    async function sendPost() {
+                        const headers = { 'Content-Type': 'application/json' }
+                        const body = JSON.stringify({
+                            userId: userId,
+                            newNick: newNick,
+                            newColor: newColor,
+                            oldNick: nick,
+                            oldColor: color
+                        })
+                        let response = await fetch("/changeUser", { method: "POST", body, headers })
+                        if (!response.ok)
+                            return respose.status
+                        else {
+                            const data = await response.json()
+                            const header = document.querySelector('#header')
+                            header.classList.remove(root.translateColors(color))
+                            header.classList.add(root.translateColors(data.color))
+                            nick = data.nick
+                            color = data.color
+                            myMessage.value = ""
+                        }
+                    }
+                    sendPost()
+
+                } else if (message.includes('/quit')) {
+                    location.reload();
+                } else {
+                    async function sendPost() {
+                        const headers = { 'Content-Type': 'application/json' }
+                        const body = JSON.stringify({
+                            nick: nick,
+                            color: color,
+                            text: myMessage.value
+                        })
+                        let response = await fetch("/sendMessage", { method: "POST", body, headers })
+
+                        if (!response.ok)
+                            return respose.status
+                        else {
+                            await response.json()
+                            myMessage.value = ""
+                        }
+                    }
+                    sendPost()
                 }
-                sendPost()
             }
         }
     },
 
     translateColors: function (color) {
         let className
-        switch (color) {
-            case 'Red':
+        switch (color.toLowerCase()) {
+            case 'red':
                 className = "is-danger"
                 break
-            case 'Green':
+            case 'green':
                 className = "is-success"
                 break
-            case 'Blue':
+            case 'blue':
                 className = "is-link"
                 break
-            case 'Dark':
+            case 'dark':
                 className = "is-dark"
                 break
-            case 'Cyan':
+            case 'cyan':
                 className = "is-info"
                 break
-            case 'Turquoise':
+            case 'turquoise':
                 className = "is-primary"
                 break
-            case 'Yellow':
+            case 'yellow':
                 className = "is-warning"
                 break
         }
@@ -177,8 +222,8 @@ const root = {
             header.classList.add('message-header', 'py-1')
             text.classList.add('message-body')
 
-            p.innerHTML = `@${message.nick} - ${message.time}`
-            text.innerHTML = message.text
+            p.innerText = `@${message.nick} - ${message.time}`
+            text.innerText = message.text
 
             chat.appendChild(article)
             article.appendChild(header)

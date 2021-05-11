@@ -111,7 +111,7 @@ app.post('/alp', (req, res) => {
                             .exec()
                             .then(doc => {
 
-                                if (doc.chat.toString() != body.chat.toString()) {
+                                if (JSON.stringify(doc.chat) != JSON.stringify(body.chat)) {
                                     res.status(200).json(doc)
                                 } else {
                                     pendingLoop()
@@ -167,6 +167,36 @@ app.post('/sendMessage', (req, res) => {
         .then(() => {
             res.status(200).json(messageObject)
         })
+})
+
+app.post('/changeUser', (req, res) => {
+
+    const userId = req.body.userId
+    const newNick = req.body.newNick
+    const newColor = req.body.newColor
+    const oldNick = req.body.oldNick
+    const oldColor = req.body.oldColor
+
+    if (newNick != oldNick || newColor != oldColor) {
+
+        User.updateMany(
+            {},
+            { $set: { "chat.$[elem].nick": newNick, "chat.$[elem].color": newColor } },
+            { arrayFilters: [{ "elem.nick": { $eq: oldNick }, "elem.color": { $eq: oldColor } }] }
+        )
+            .exec()
+            .then(() => {
+                User.updateOne(
+                    { _id: userId },
+                    { $set: { nick: newNick, color: newColor } }
+                )
+                    .exec()
+                    .then(() => {
+                        res.status(200).json({ nick: newNick, color: newColor })
+                    })
+
+            })
+    }
 })
 
 app.listen(PORT, function () {
