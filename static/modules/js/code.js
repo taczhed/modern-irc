@@ -4,12 +4,14 @@ let nick
 let color
 let userId
 let chat = []
+let ps
 
 const root = {
 
     init: function () {
         this.postUserInformations()
         this.sendMessege()
+        this.scrollbar()
     },
 
     postUserInformations: function () {
@@ -207,7 +209,8 @@ const root = {
     generateChat: function (messages) {
 
         const chat = document.querySelector('#chat-root')
-        chat.innerHTML = ""
+        let chatMessages = document.querySelectorAll('.chat-message')
+        for (let message of chatMessages) message.remove()
 
         for (let message of messages) {
 
@@ -218,7 +221,7 @@ const root = {
             const p = document.createElement('p')
             const text = document.createElement('div')
 
-            article.classList.add('message', 'is-small', className)
+            article.classList.add('message', 'is-small', 'chat-message', className)
             header.classList.add('message-header', 'py-1')
             text.classList.add('message-body')
 
@@ -236,6 +239,15 @@ const root = {
         //auto scroll
         // const element = document.getElementById("chat-root")
         // element.scrollTop = element.scrollHeight
+    },
+
+    scrollbar: function () {
+        //scrollbar
+        ps = new
+            PerfectScrollbar('#chat-root', {
+                wheelSpeed: 1,
+                minScrollbarLength: 20
+            });
     }
 }
 

@@ -10,13 +10,14 @@
     <!-- modules -->
     <script src="modules/jquery/jquery.js"></script>
     <script src="modules/css-emoticons/jquery.cssemoticons.min.js" type="text/javascript"></script>
+    <script src="modules/perfect-scrollbar/dist/perfect-scrollbar.js"></script>
     <script defer type="module" src="modules/js/code.js"></script>
     <script defer type="module" src="modules/js/emoticons.js"></script>
     <link rel="stylesheet" href="css/style.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="css/scrollbar.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="modules/bulma/css/bulma-rtl.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="modules/bulma/css/bulma.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="modules/css-emoticons/jquery.cssemoticons.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="modules/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" type="text/css">
 
     <!-- fonts -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -81,10 +82,12 @@
 
     <!-- chat -->
     <section id="chat" class="section py-3 px-5">
-
         <div class="columns is-centered">
-            <div id="chat-root" class="column is-9"></div>
+            <div class="column is-9">
+                <div id="chat-root"></div>
+            </div>
         </div>
+
     </section>
 
     <!-- bottom-bar -->

@@ -38,6 +38,8 @@ section#chat {
 
 
 div#chat-root {
-    overflow-y: scroll;
-    max-height: calc(100vh - 200px);
+    /* overflow-y: scroll; */
+    position: relative;
+    max-height: calc(100vh - 220px);
+    padding-right: 15px;
 }
