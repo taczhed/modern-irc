@@ -125,7 +125,7 @@ const root = {
                         else newNick = message[indexOfNick + 1]
                     } else {
                         let indexOfColor = message.indexOf('/color')
-                        if (indexOfColor + 1 == message.length) newColor = nick
+                        if (indexOfColor + 1 == message.length) newColor = color
                         else newColor = message[indexOfColor + 1]
                     }
 
