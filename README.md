@@ -5,11 +5,12 @@ Simple text messenger to chat with strangers!
 ## [Check out!](http://modern-irc.herokuapp.com/)
 
 ### Commands
-- `color <new themes name>`
-- `nick <new nick name>`
+- `/color <new themes name>`
+- `/nick <new nick name>`
 
 ### Functions
 - themes: Red, Green, Blue, Dark, Cyan, Turquoise, Yellow
+- try emoticons :)
 
 ### Instalation
 - `git clone https://github.com/taczhed/modern-irc.git`
